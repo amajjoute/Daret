@@ -58,10 +58,27 @@ function validateCotisation() {
 }
 cotisation.addEventListener("input", validateCotisation)
 
+function validateDateDebut() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const selectedDate = new Date(dateDebut.value + "T00:00:00");
+
+    if (!dateDebut.value || selectedDate < today) {
+        showError(dateDebut, msgErrDateDebut, "La date de début doit être aujourd'hui ou une date ultérieure.");
+        return false;
+    }
+
+    hideError(dateDebut, msgErrDateDebut);
+    return true;
+}
+dateDebut.addEventListener("change", validateDateDebut);
+
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
     validateNameCercle();
     validateCotisation();
+    validateDateDebut();
 });
 //-----------------------------------------------------------
