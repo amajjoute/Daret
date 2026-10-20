@@ -45,11 +45,29 @@ function validateNameCercle() {
 }
 
 nomCercle.addEventListener("input", validateNameCercle);
+cotisation.addEventListener("input", validateCotisation)
 
 form.addEventListener("submit", function (event) {
     event.preventDefault();
     validateNameCercle();
 });
 
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
 
+    validateNameCercle();
+    validateCotisation();
+});
+
+function validateCotisation() {
+    const amount = Number(cotisation.value);
+
+    if (cotisation.value.trim() === "" || !Number.isInteger(amount) || amount < 100 || amount > 50000) {
+        showError(cotisation, msgErrCotisation, "La cotisation doit etre un entier entre 100 et 50 000 MAD.");
+        return false;
+    }
+
+    hideError(cotisation, msgErrCotisation);
+    return true;
+}
 //-----------------------------------------------------------
