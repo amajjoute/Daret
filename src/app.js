@@ -77,8 +77,16 @@ dateDebut.addEventListener("change", validateDateDebut);
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    validateNameCercle();
-    validateCotisation();
-    validateDateDebut();
+    const nameValid = validateNameCercle();
+    const amountValid = validateCotisation();
+    const dateValid = validateDateDebut();
+
+    if (!nameValid) {
+        nomCercle.focus();
+    } else if (!amountValid) {
+        cotisation.focus();
+    } else if (!dateValid) {
+        dateDebut.focus();
+    }
 });
 //-----------------------------------------------------------
