@@ -43,21 +43,7 @@ function validateNameCercle() {
     hideError(nomCercle, msgErrNomCercle);
     return true;
 }
-
 nomCercle.addEventListener("input", validateNameCercle);
-cotisation.addEventListener("input", validateCotisation)
-
-form.addEventListener("submit", function (event) {
-    event.preventDefault();
-    validateNameCercle();
-});
-
-form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    validateNameCercle();
-    validateCotisation();
-});
 
 function validateCotisation() {
     const amount = Number(cotisation.value);
@@ -70,4 +56,12 @@ function validateCotisation() {
     hideError(cotisation, msgErrCotisation);
     return true;
 }
+cotisation.addEventListener("input", validateCotisation)
+
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    validateNameCercle();
+    validateCotisation();
+});
 //-----------------------------------------------------------
