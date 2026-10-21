@@ -46,6 +46,7 @@
               name="nom-cercle"
               type="text"
               autocomplete="off"
+              aria-describedby="nom-cercle-erreur"
               class="mt-1 w-full rounded border border-daret-bordure px-3 py-2 focus:outline-2 focus:outline-offset-2 focus:outline-daret-vert"
             />
             <p id="nom-cercle-erreur" class="mt-1 hidden text-sm font-medium text-daret-erreur"></p>
@@ -58,6 +59,7 @@
               name="cotisation"
               type="number"
               inputmode="numeric"
+              aria-describedby="cotisation-erreur"
               class="mt-1 w-full rounded border border-daret-bordure px-3 py-2 focus:outline-2 focus:outline-offset-2 focus:outline-daret-vert"
             />
             <p id="cotisation-erreur" class="mt-1 hidden text-sm font-medium text-daret-erreur"></p>
@@ -68,6 +70,7 @@
             <select
               id="periodicite"
               name="periodicite"
+              aria-describedby="periodicite-erreur"
               class="mt-1 w-full rounded border border-daret-bordure bg-white px-3 py-2 focus:outline-2 focus:outline-offset-2 focus:outline-daret-vert"
             >
               <option value="hebdomadaire">Hebdomadaire</option>
@@ -83,6 +86,7 @@
               id="date-debut"
               name="date-debut"
               type="date"
+              aria-describedby="date-debut-erreur"
               class="mt-1 w-full rounded border border-daret-bordure px-3 py-2 focus:outline-2 focus:outline-offset-2 focus:outline-daret-vert"
             />
             <p id="date-debut-erreur" class="mt-1 hidden text-sm font-medium text-daret-erreur"></p>
