@@ -87,9 +87,6 @@ function validateDuplicateNames(names) {
     return true;
 }
 
-
-//-----------------------------------------------------------
-
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -109,3 +106,78 @@ form.addEventListener("submit", function (event) {
         return;
     }
 });
+//US-20
+const participantsList = document.querySelector("#participants-liste");
+const participantsCount = document.querySelector("#participants-compteur");
+const participantsErrMsg = document.querySelector("#participants-erreur");
+const participantsAdd = document.querySelector("#ajouter-participant");
+
+function createParticipants() {
+    const participants = document.createElement("li");
+
+    const label = document.createElement("label");
+    label.textContent = "Nom du participant";
+
+    const div = document.createElement("div");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "participants[]";
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Retirer";
+
+    div.append(input, button);
+    participants.append(label, div);
+    participantsList.append(participants);
+}
+
+function updateParticipants() {
+    const participants = participantsList.querySelectorAll("li");
+    const count = participants.length;
+
+    participantsCount.textContent = `${count} participants`;
+
+    participants.forEach((participant) => {
+        const button = participant.querySelector("button");
+        button.hidden = count <= 2;
+    });
+}
+
+function deleteParticipants(participant) {
+    const participants = participantsList.querySelectorAll("li");
+    
+    if (participants.length <= 2) {
+        return;
+    }
+
+    participant.remove();
+    updateParticipants();
+}
+
+createParticipants();
+createParticipants();
+createParticipants();
+updateParticipants();
+
+participantsAdd.addEventListener("click", function () {
+    const participants = participantsList.querySelectorAll("li");
+
+    if (participants.length >= 20) {
+        participantsErrMsg.textContent = "Maximum 20 participants.";
+        return;
+    }
+
+    createParticipants();
+    updateParticipants();
+
+});
+
+participantsList.addEventListener("click", function (event) {
+    if (event.target.matches("button")) {
+        const participant = event.target.closest("li");
+        deleteParticipants(participant);
+    }
+});
+//-----------------------------------------------------------
