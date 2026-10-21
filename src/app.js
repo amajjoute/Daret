@@ -87,9 +87,6 @@ function validateDuplicateNames(names) {
     return true;
 }
 
-
-//-----------------------------------------------------------
-
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -109,3 +106,31 @@ form.addEventListener("submit", function (event) {
         return;
     }
 });
+
+//-----------------------------------------------------------
+//US-20
+const participantsList = document.querySelector("#paricipants-liste");
+const participantsCount = document.querySelector("#participants-compteur");
+const participantsErrMsg = document.querySelector("#participants-erreur");
+const participantsAdd = document.querySelector("#ajouter-participant");
+
+function createParticipants() {
+    const participants = document.createElement("li");
+
+    const label = document.createElement("label");
+    label.textContent = "Nom du participant";
+
+    const div = document.createElement("div");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "participants[]";
+
+    const button = document.createElement("button");
+    input.type = "button";
+    input.textContent = "Retirer";
+
+    div.append(input, button);
+    participants.append(label, div, input, button);
+    participantsList.append(participants);
+}
