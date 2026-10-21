@@ -87,7 +87,25 @@ function validateDuplicateNames(names) {
     return true;
 }
 
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
 
+    const nameValid = validateNameCercle();
+    const amountValid = validateCotisation();
+    const dateValid = validateDateDebut();
+
+    if (!nameValid) {
+        nomCercle.focus();
+    } else if (!amountValid) {
+        cotisation.focus();
+    } else if (!dateValid) {
+        dateDebut.focus();
+    }
+
+    if (!nameValid || !amountValid || !dateValid) {
+        return;
+    }
+});
 //US-20
 const participantsList = document.querySelector("#participants-liste");
 const participantsCount = document.querySelector("#participants-compteur");
@@ -123,7 +141,7 @@ function updateParticipants() {
 
     participants.forEach((participant) => {
         const button = participant.querySelector("button");
-        button.disabled = count <= 2;
+        button.hidden = count <= 2;
     });
 }
 
@@ -138,26 +156,28 @@ function deleteParticipants(participant) {
     updateParticipants();
 }
 
+createParticipants();
+createParticipants();
+createParticipants();
+updateParticipants();
 
+participantsAdd.addEventListener("click", function () {
+    const participants = participantsList.querySelectorAll("li");
 
-//-----------------------------------------------------------
-
-form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const nameValid = validateNameCercle();
-    const amountValid = validateCotisation();
-    const dateValid = validateDateDebut();
-
-    if (!nameValid) {
-        nomCercle.focus();
-    } else if (!amountValid) {
-        cotisation.focus();
-    } else if (!dateValid) {
-        dateDebut.focus();
-    }
-
-    if (!nameValid || !amountValid || !dateValid) {
+    if (participants.length >= 20) {
+        participantsErrMsg.textContent = "Maximum 20 participants.";
         return;
     }
+
+    createParticipants();
+    updateParticipants();
+
 });
+
+participantsList.addEventListener("click", function (event) {
+    if (event.target.matches("button")) {
+        const participant = event.target.closest("li");
+        deleteParticipants(participant);
+    }
+});
+//-----------------------------------------------------------
