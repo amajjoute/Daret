@@ -87,6 +87,61 @@ function validateDuplicateNames(names) {
     return true;
 }
 
+
+//US-20
+const participantsList = document.querySelector("#participants-liste");
+const participantsCount = document.querySelector("#participants-compteur");
+const participantsErrMsg = document.querySelector("#participants-erreur");
+const participantsAdd = document.querySelector("#ajouter-participant");
+
+function createParticipants() {
+    const participants = document.createElement("li");
+
+    const label = document.createElement("label");
+    label.textContent = "Nom du participant";
+
+    const div = document.createElement("div");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "participants[]";
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Retirer";
+
+    div.append(input, button);
+    participants.append(label, div);
+    participantsList.append(participants);
+}
+
+function updateParticipants() {
+    const participants = participantsList.querySelectorAll("li");
+    const count = participants.length;
+
+    participantsCount.textContent = `${count} participants`;
+
+    participants.forEach((participant) => {
+        const button = participant.querySelector("button");
+        button.disabled = count <= 2;
+    });
+}
+
+function deleteParticipants(participant) {
+    const participants = participantsList.querySelectorAll("li");
+    
+    if (participants.length <= 2) {
+        return;
+    }
+
+    participant.remove();
+    updateParticipants();
+}
+
+
+
+//-----------------------------------------------------------
+
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -106,31 +161,3 @@ form.addEventListener("submit", function (event) {
         return;
     }
 });
-
-//-----------------------------------------------------------
-//US-20
-const participantsList = document.querySelector("#paricipants-liste");
-const participantsCount = document.querySelector("#participants-compteur");
-const participantsErrMsg = document.querySelector("#participants-erreur");
-const participantsAdd = document.querySelector("#ajouter-participant");
-
-function createParticipants() {
-    const participants = document.createElement("li");
-
-    const label = document.createElement("label");
-    label.textContent = "Nom du participant";
-
-    const div = document.createElement("div");
-
-    const input = document.createElement("input");
-    input.type = "text";
-    input.name = "participants[]";
-
-    const button = document.createElement("button");
-    input.type = "button";
-    input.textContent = "Retirer";
-
-    div.append(input, button);
-    participants.append(label, div, input, button);
-    participantsList.append(participants);
-}
