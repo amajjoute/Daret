@@ -104,4 +104,8 @@ form.addEventListener("submit", function (event) {
     } else if (!dateValid) {
         dateDebut.focus();
     }
+
+    if (!nameValid || !amountValid || !dateValid) {
+        return;
+    }
 });
