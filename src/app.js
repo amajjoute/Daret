@@ -74,6 +74,22 @@ function validateDateDebut() {
 }
 dateDebut.addEventListener("change", validateDateDebut);
 
+function validateDuplicateNames(names) {
+    const normalizedNames = names.map(name => name.trim().toLowerCase());
+
+    for (let i = 0; i < normalizedNames.length; i++) {
+        for (let j = i + 1; j < normalizedNames.length; j++) {
+            if (normalizedNames[i] === normalizedNames[j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
+//-----------------------------------------------------------
+
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -89,4 +105,3 @@ form.addEventListener("submit", function (event) {
         dateDebut.focus();
     }
 });
-//-----------------------------------------------------------
