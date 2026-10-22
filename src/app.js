@@ -87,26 +87,7 @@ function validateDuplicateNames(names) {
     return true;
 }
 
-form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const nameValid = validateNameCercle();
-    const amountValid = validateCotisation();
-    const dateValid = validateDateDebut();
-
-    if (!nameValid) {
-        nomCercle.focus();
-    } else if (!amountValid) {
-        cotisation.focus();
-    } else if (!dateValid) {
-        dateDebut.focus();
-    }
-
-    if (!nameValid || !amountValid || !dateValid) {
-        return;
-    }
-});
-//US-20
+//US-02
 const participantsList = document.querySelector("#participants-liste");
 const participantsCount = document.querySelector("#participants-compteur");
 const participantsErrMsg = document.querySelector("#participants-erreur");
@@ -180,4 +161,106 @@ participantsList.addEventListener("click", function (event) {
         deleteParticipants(participant);
     }
 });
+
+//US-03
+function amountReceived(cotisation, nbParticipants) {
+    return (cotisation * nbParticipants);
+}
+
+function totalPaid(cotisation, nbParticipants) {
+    return (cotisation * nbParticipants);
+}
+
+function toursNumber(nbParticipants) {
+    return (nbParticipants);
+}
+
+function dateBegginEnd(date, nbParticipants, periodicite) {
+    const startDate = new Date(date);
+    const endDate = new Date(startDate);
+
+    const intervals = nbParticipants - 1;
+
+    if (periodicite === "Hebdomadaire") {
+        endDate.setDate(endDate.getDate() + 7 * intervals);
+    } else if (periodicite === "Tous les 15 jours") {
+        endDate.setDate(endDate.getDate() + 15 * intervals);
+    } else if (periodicite === "Mensuelle") {
+        endDate.setMonth(endDate.getMonth() + intervals);
+    //     const originalDay = endDate.getDate();
+
+    //     endDate.setDate(1);
+    //     endDate.getMonth(endDate.getMonth() + intervals);
+
+    //     const lastDayOfMonth = new date(
+    //         endDate.getFullYear(),
+    //         endDate.getMonth() + 1,
+    //         0
+    //     ).getDate();
+
+    //     endDate.setDate(Math.min(originalDay, lastDayOfMonth));
+    }
+
+    return [startDate, endDate];
+}
+
+const resumeCagnotte = document.querySelector("#resume-cagnotte");
+const resumeTotalCycle = document.querySelector("#resume-total-cycle");
+const resumeNbTours = document.querySelector("#resume-nb-tours");
+const resumeDates = document.querySelector("#resume-dates");
+
+const etatVide = document.querySelector("#etat-vide");
+const contenuResultat = document.querySelector("#contenu-resultat");
+
+form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const nameValid = validateNameCercle();
+    const amountValid = validateCotisation();
+    const dateValid = validateDateDebut();
+
+    if (!nameValid) {
+        nomCercle.focus();
+    } else if (!amountValid) {
+        cotisation.focus();
+    } else if (!dateValid) {
+        dateDebut.focus();
+    }
+
+    if (!nameValid || !amountValid || !dateValid) {
+        return;
+    }
+
+    const nbParticipants = participantsList.querySelectorAll("li").length;
+
+    const cotisationValue = Number(cotisation.value);
+
+    const montant = amountReceived(
+        cotisationValue,
+        nbParticipants
+    );
+
+    const total = totalPaid(
+        cotisationValue,
+        nbParticipants
+    );
+
+    const tours = toursNumber(nbParticipants);
+
+    const [startDate, endDate] = dateBegginEnd(
+        dateDebut.value,
+        nbParticipants,
+        periodicite.value
+    );
+
+    resumeCagnotte.textContent = `${montant} DH`;
+    resumeTotalCycle.textContent = `${total} DH`;
+    resumeNbTours.textContent = tours;
+
+    resumeDates.textContent = `${startDate.toLocaleDateString("fr-FR")} · ` + `${endDate.toLocaleDateString("fr-FR")}`;
+
+    contenuResultat.classList.remove("hidden");
+    etatVide.classList.add("hidden");
+});
+
 //-----------------------------------------------------------
