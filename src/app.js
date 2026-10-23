@@ -212,6 +212,20 @@ const resumeDates = document.querySelector("#resume-dates");
 const etatVide = document.querySelector("#etat-vide");
 const contenuResultat = document.querySelector("#contenu-resultat");
 
+//US-04
+function getParticipantsList() {
+    const getParticipants = [];
+
+    for (const participantList of participantsList) {
+        getParticipants.push(participantList);
+    }
+
+    return (getParticipants);
+}
+
+
+
+//-----------------------------------------------------------
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -262,5 +276,3 @@ form.addEventListener("submit", function (event) {
     contenuResultat.classList.remove("hidden");
     etatVide.classList.add("hidden");
 });
-
-//-----------------------------------------------------------
