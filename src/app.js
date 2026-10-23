@@ -214,16 +214,34 @@ const contenuResultat = document.querySelector("#contenu-resultat");
 
 //US-04
 function getParticipantsList() {
-    const getParticipants = [];
-
-    for (const participantList of participantsList) {
-        getParticipants.push(participantList);
-    }
-
-    return (getParticipants);
+    return participantsList.querySelectorAll("li");
 }
 
+function getTourDate(startDate, tourIndex, periodicite) {
+    const date = new Date(startDate);
+    
+    if (periodicite === "Hebdomadaire") {
+        date.setDate(date.getDate() + tourIndex * 7)
+    } else if (periodicite === "Tous les 15 jours") {
+        date.setDate(date.getDate() + tourIndex * 15)
+    } else if (periodicite === "Mensuelle") {
+        date.setMonth(date.getMonth() + tourIndex)
+    }
 
+    return date;
+}
+
+function generateCalendar() {
+    getParticipantsList();
+    const calendendarBody = document.querySelector("#calendrier-corps");
+    calendendarBody.classList.remove("tr");
+
+    for ( const participant of participants) {
+        const tr = document.createElement("tr");
+        const th = document.createElement("th");
+        th.textContent = ``;
+    }
+}
 
 //-----------------------------------------------------------
 form.addEventListener("submit", function (event) {
