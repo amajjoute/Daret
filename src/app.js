@@ -212,6 +212,63 @@ const resumeDates = document.querySelector("#resume-dates");
 const etatVide = document.querySelector("#etat-vide");
 const contenuResultat = document.querySelector("#contenu-resultat");
 
+//US-04
+function getParticipantsList() {
+    return participantsList.querySelectorAll("li");
+}
+
+function getTourDate(startDate, tourIndex, periodicite) {
+    const date = new Date(startDate);
+    
+    if (periodicite === "Hebdomadaire") {
+        date.setDate(date.getDate() + tourIndex * 7)
+    } else if (periodicite === "Tous les 15 jours") {
+        date.setDate(date.getDate() + tourIndex * 15)
+    } else if (periodicite === "Mensuelle") {
+        date.setMonth(date.getMonth() + tourIndex)
+    }
+
+    return date;
+}
+
+function generateCalendar() {
+    const participants = getParticipantsList();
+    const calendendarBody = document.querySelector("#calendrier-corps");
+
+    calendendarBody.innerHTML = "";
+    let i = 0;
+
+    for ( const participant of participants) {
+        const tr = document.createElement("tr");
+
+        const td1 = document.createElement("td");
+        td1.textContent = i + 1;
+
+        const td2 = document.createElement("td");
+        td2.textContent = getTourDate(dateDebut.value, i, periodicite.value).toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+
+        const td3 = document.createElement("td");
+        td3.textContent = participant.querySelector("input").value;
+
+        const td4 = document.createElement("td");
+        td4.textContent = amountReceived(Number(cotisation.value), participants.length);
+
+        const td5 = document.createElement("td");
+        td5.textContent = "À venir";
+
+        tr.append(td1, td2, td3, td4, td5);
+        calendendarBody.append(tr);
+
+        i++;
+    }
+    return (calendendarBody);
+}
+
+//-----------------------------------------------------------
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -261,6 +318,6 @@ form.addEventListener("submit", function (event) {
 
     contenuResultat.classList.remove("hidden");
     etatVide.classList.add("hidden");
-});
 
-//-----------------------------------------------------------
+    generateCalendar();
+});
