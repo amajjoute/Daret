@@ -232,15 +232,40 @@ function getTourDate(startDate, tourIndex, periodicite) {
 }
 
 function generateCalendar() {
-    getParticipantsList();
+    const participants = getParticipantsList();
     const calendendarBody = document.querySelector("#calendrier-corps");
-    calendendarBody.classList.remove("tr");
+
+    calendendarBody.innerHTML = "";
+    let i = 0;
 
     for ( const participant of participants) {
         const tr = document.createElement("tr");
-        const th = document.createElement("th");
-        th.textContent = ``;
+
+        const td1 = document.createElement("td");
+        td1.textContent = i + 1;
+
+        const td2 = document.createElement("td");
+        td2.textContent = getTourDate(dateDebut.value, i, periodicite.value).toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        });
+
+        const td3 = document.createElement("td");
+        td3.textContent = participant.querySelector("input").value;
+
+        const td4 = document.createElement("td");
+        td4.textContent = amountReceived(Number(cotisation.value), participants.length);
+
+        const td5 = document.createElement("td");
+        td5.textContent = "À venir";
+
+        tr.append(td1, td2, td3, td4, td5);
+        calendendarBody.append(tr);
+
+        i++;
     }
+    return (calendendarBody);
 }
 
 //-----------------------------------------------------------
@@ -293,4 +318,6 @@ form.addEventListener("submit", function (event) {
 
     contenuResultat.classList.remove("hidden");
     etatVide.classList.add("hidden");
+
+    generateCalendar();
 });
