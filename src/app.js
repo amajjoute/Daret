@@ -187,18 +187,6 @@ function dateBegginEnd(date, nbParticipants, periodicite) {
         endDate.setDate(endDate.getDate() + 15 * intervals);
     } else if (periodicite === "Mensuelle") {
         endDate.setMonth(endDate.getMonth() + intervals);
-    //     const originalDay = endDate.getDate();
-
-    //     endDate.setDate(1);
-    //     endDate.getMonth(endDate.getMonth() + intervals);
-
-    //     const lastDayOfMonth = new date(
-    //         endDate.getFullYear(),
-    //         endDate.getMonth() + 1,
-    //         0
-    //     ).getDate();
-
-    //     endDate.setDate(Math.min(originalDay, lastDayOfMonth));
     }
 
     return [startDate, endDate];
@@ -234,6 +222,7 @@ function getTourDate(startDate, tourIndex, periodicite) {
 function generateCalendar(participants = [...getParticipantsList()]) {
     const calendendarBody = document.querySelector("#calendrier-corps");
 
+    calendarParticipants = [...participants];
     calendendarBody.innerHTML = "";
 
     for (let i = 0; i < participants.length; i++) {
@@ -255,7 +244,10 @@ function generateCalendar(participants = [...getParticipantsList()]) {
         });
 
         const td3 = document.createElement("td");
-        td3.textContent = participant.querySelector("input").value;
+        const beneficiaryButton = document.createElement("button");
+        beneficiaryButton.type = "button";
+        beneficiaryButton.classList.add("beneficiaire-detail");
+        beneficiaryButton.textContent = participant.querySelector("input").value;
 
         const td4 = document.createElement("td");
         td4.textContent = amountReceived(
@@ -274,6 +266,7 @@ function generateCalendar(participants = [...getParticipantsList()]) {
         button.textContent = "Marquer comme terminé";
         button.classList.add("bouton-statut-tour");
 
+        td3.append(beneficiaryButton);
         td5.append(statut, button);
 
         tr.append(td1, td2, td3, td4, td5);
@@ -310,7 +303,6 @@ ordreSaisieButton.addEventListener("click", function () {
 });
 
 //US-06
-
 const calendarBody = document.querySelector("#calendrier-corps");
 
 calendarBody.addEventListener("click", function (event) {
@@ -331,6 +323,98 @@ calendarBody.addEventListener("click", function (event) {
         button.textContent = "Marquer comme terminé";
     }
 })
+
+//US-07
+const detailTour = document.querySelector("#detail-tour");
+const detailTitre = document.querySelector("#detail-titre");
+const detailDate = document.querySelector("#detail-date");
+const detailBeneficiaire = document.querySelector("#detail-beneficiaire");
+const detailMontant = document.querySelector("#detail-montant");
+const detailContributeurs = document.querySelector("#detail-contributeurs");
+const detailFermer = document.querySelector("#detail-fermer");
+
+let calendarParticipants = [];
+let detailOpener = null;
+
+calendarBody.addEventListener("click", function (event) {
+    const beneficiaryButton = event.target.closest(".beneficiaire-detail");
+
+    if (!beneficiaryButton) {
+        return;
+    }
+
+    const row = beneficiaryButton.closest("tr");
+    const tourIndex = Number(row.cells[0].textContent) - 1;
+    const participant = calendarParticipants[tourIndex];
+
+    if (!participant) {
+        return;
+    }
+
+    const beneficiaryName = participant.querySelector("input").value;
+    const tourDate = getTourDate(
+        dateDebut.value,
+        tourIndex,
+        periodicite.value
+    );
+
+    detailTitre.textContent = `Tour n° ${tourIndex + 1}`;
+    detailDate.textContent = tourDate.toLocaleDateString("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+    detailBeneficiaire.textContent = beneficiaryName;
+    detailMontant.textContent = `${amountReceived(
+        Number(cotisation.value),
+        calendarParticipants.length
+    )} DH`;
+
+    detailContributeurs.replaceChildren();
+
+    calendarParticipants.forEach(function (otherParticipant, index) {
+        if (index === tourIndex) {
+            return;
+        }
+
+        const li = document.createElement("li");
+        li.textContent = otherParticipant.querySelector("input").value;
+        detailContributeurs.append(li);
+    });
+
+    detailOpener = beneficiaryButton;
+    detailTour.showModal();
+});
+
+detailFermer.addEventListener("click", function () {
+    detailTour.close();
+});
+
+detailTour.addEventListener("close", function () {
+    if (detailOpener && detailOpener.isConnected) {
+        detailOpener.focus();
+    }
+
+    detailOpener = null;
+});
+
+detailTour.addEventListener("click", function (event) {
+    if (event.target !== detailTour) {
+        return;
+    }
+
+    const rect = detailTour.getBoundingClientRect();
+
+    if (
+        event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom
+    ) {
+        detailTour.close();
+    }
+});
+
 
 //-----------------------------------------------------------
 form.addEventListener("submit", function (event) {
