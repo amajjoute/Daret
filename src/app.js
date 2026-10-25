@@ -231,7 +231,6 @@ function getTourDate(startDate, tourIndex, periodicite) {
     return date;
 }
 
-
 function generateCalendar(participants = [...getParticipantsList()]) {
     const calendendarBody = document.querySelector("#calendrier-corps");
 
@@ -265,7 +264,17 @@ function generateCalendar(participants = [...getParticipantsList()]) {
         );
 
         const td5 = document.createElement("td");
-        td5.textContent = "À venir";
+
+        const statut = document.createElement("span");
+        statut.classList.add("statut-tour");
+        statut.textContent = "À venir";
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "Marquer comme terminé";
+        button.classList.add("bouton-statut-tour");
+
+        td5.append(statut, button);
 
         tr.append(td1, td2, td3, td4, td5);
         calendendarBody.append(tr);
@@ -299,6 +308,29 @@ tirageAuSortButton.addEventListener("click", function () {
 ordreSaisieButton.addEventListener("click", function () {
     generateCalendar();
 });
+
+//US-06
+
+const calendendarBody = document.querySelector("#calendrier-corps");
+
+calendendarBody.addEventListener("click", function (event) {
+    const button = event.target.closest(".bouton-statut-tour");
+
+    if (!button) {
+        return;
+    }
+
+    const row = button.closest("tr");
+    const statut = row.querySelector(".statut-tour");
+
+    if (statut.textContent === "À venir") {
+        statut.textContent = "Terminé";
+        button.textContent = "Annuler";
+    } else {
+        statut.textContent = "À venir";
+        button.textContent = "Marquer comme terminé";
+    }
+})
 
 //-----------------------------------------------------------
 form.addEventListener("submit", function (event) {
