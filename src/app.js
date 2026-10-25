@@ -231,21 +231,25 @@ function getTourDate(startDate, tourIndex, periodicite) {
     return date;
 }
 
-function generateCalendar() {
-    const participants = getParticipantsList();
+
+function generateCalendar(participants = [...getParticipantsList()]) {
     const calendendarBody = document.querySelector("#calendrier-corps");
 
     calendendarBody.innerHTML = "";
-    let i = 0;
 
-    for ( const participant of participants) {
+    for (let i = 0; i < participants.length; i++) {
+        const participant = participants[i];
         const tr = document.createElement("tr");
 
         const td1 = document.createElement("td");
         td1.textContent = i + 1;
 
         const td2 = document.createElement("td");
-        td2.textContent = getTourDate(dateDebut.value, i, periodicite.value).toLocaleDateString("fr-FR", {
+        td2.textContent = getTourDate(
+            dateDebut.value,
+            i,
+            periodicite.value
+        ).toLocaleDateString("fr-FR", {
             day: "numeric",
             month: "long",
             year: "numeric"
@@ -255,18 +259,46 @@ function generateCalendar() {
         td3.textContent = participant.querySelector("input").value;
 
         const td4 = document.createElement("td");
-        td4.textContent = amountReceived(Number(cotisation.value), participants.length);
+        td4.textContent = amountReceived(
+            Number(cotisation.value),
+            participants.length
+        );
 
         const td5 = document.createElement("td");
         td5.textContent = "À venir";
 
         tr.append(td1, td2, td3, td4, td5);
         calendendarBody.append(tr);
-
-        i++;
     }
-    return (calendendarBody);
+
+    return calendendarBody;
 }
+
+ // US-05
+const tirageAuSortButton = document.querySelector("#tirage-au-sort");
+const ordreSaisieButton = document.querySelector("#ordre-saisie");
+
+let originalList = [];
+let partList = [];
+
+function shuffleArray(list) {
+    for (let i = list.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [list[i], list[j]] = [list[j], list[i]];
+    }
+
+    return list;
+}
+
+tirageAuSortButton.addEventListener("click", function () {
+    originalList = [...getParticipantsList()];
+    partList = shuffleArray([...originalList]);
+    generateCalendar(partList);
+});
+
+ordreSaisieButton.addEventListener("click", function () {
+    generateCalendar();
+});
 
 //-----------------------------------------------------------
 form.addEventListener("submit", function (event) {
