@@ -311,9 +311,9 @@ ordreSaisieButton.addEventListener("click", function () {
 
 //US-06
 
-const calendendarBody = document.querySelector("#calendrier-corps");
+const calendarBody = document.querySelector("#calendrier-corps");
 
-calendendarBody.addEventListener("click", function (event) {
+calendarBody.addEventListener("click", function (event) {
     const button = event.target.closest(".bouton-statut-tour");
 
     if (!button) {
