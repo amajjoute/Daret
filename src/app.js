@@ -415,6 +415,20 @@ detailTour.addEventListener("click", function (event) {
     }
 });
 
+//US-08
+const buttonReinitialiser = document.querySelector("#reinitialiser");
+const contenu = document.querySelector("#contenu");
+
+buttonReinitialiser.addEventListener("click", function() {
+    contenu.querySelectorAll("input").forEach(function(input) {
+        input.value = "";
+    });
+    calendarBody.innerHTML = "";
+    resumeCagnotte.innerHTML = "";
+    resumeTotalCycle.innerHTML = "";
+    resumeNbTours.innerHTML = "";
+    resumeDates.innerHTML = "";
+});
 
 //-----------------------------------------------------------
 form.addEventListener("submit", function (event) {
