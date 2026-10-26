@@ -1,7 +1,4 @@
 // Daret — simulateur. Ton code commence ici.
-<<<<<<< HEAD
-// Le HTML (index.html) est déjà intégré : lis-le, repère les id et les data-*, puis fais-le vivre.
-=======
 // Le HTML (index.html) est déjà intégré : lis-le, repère les id et les data-*, puis fais-le vivre.
 
 // US-01
@@ -486,4 +483,3 @@ form.addEventListener("submit", function (event) {
 
     generateCalendar();
 });
->>>>>>> develop
